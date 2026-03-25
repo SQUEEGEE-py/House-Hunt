@@ -30,7 +30,13 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
       {/* Top row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 14, color: '#e8e6e0', fontWeight: 500, marginBottom: 2 }}>{listing.address}</div>
+          {listing.url
+            ? <a href={listing.url} target="_blank" rel="noreferrer" style={{ fontSize: 14, color: '#e8e6e0', fontWeight: 500, marginBottom: 2, display: 'block', textDecoration: 'none' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#4a9e6e'}
+                onMouseLeave={e => e.currentTarget.style.color = '#e8e6e0'}
+              >{listing.address} ↗</a>
+            : <div style={{ fontSize: 14, color: '#e8e6e0', fontWeight: 500, marginBottom: 2 }}>{listing.address}</div>
+          }
           {listing.neighborhood && (
             <div style={{ fontSize: 12, color: '#555', fontFamily: '"DM Mono", monospace' }}>{listing.neighborhood}</div>
           )}
