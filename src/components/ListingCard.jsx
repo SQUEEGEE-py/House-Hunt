@@ -93,7 +93,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         {/* Last note preview */}
         {lastNote && (
           <div style={{ flex: 1, fontSize: 12, color: '#555', fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-            <span style={{ color: '#3a7a55' }}>{lastNote.author.split(' ')[0]}:</span> {lastNote.text}
+            <span style={{ color: '#3a7a55' }}>{(lastNote.author || 'anon').split(' ')[0]}:</span> {lastNote.text}
           </div>
         )}
 
