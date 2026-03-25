@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const ROOMMATES = ['Person 1', 'Person 2', 'Person 3', 'Person 4']
 
-export default function NotesModal({ listing, onAddNote, onClose }) {
+export default function NotesModal({ listing, onAddNote, onDeleteNote, onClose }) {
   const [author, setAuthor] = useState(ROOMMATES[0])
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
@@ -46,6 +46,7 @@ export default function NotesModal({ listing, onAddNote, onClose }) {
                 borderBottom: '1px solid #1e1e1e',
                 display: 'flex',
                 gap: 10,
+                alignItems: 'flex-start',
               }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: '50%',
@@ -55,10 +56,18 @@ export default function NotesModal({ listing, onAddNote, onClose }) {
                 }}>
                   {(n.author || 'anon').split(' ').map(w => w[0]).join('').slice(0, 2)}
                 </div>
-                <div>
+                <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 11, color: '#4a9e6e', marginBottom: 3, fontFamily: '"DM Mono", monospace' }}>{n.author || 'anon'}</div>
                   <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.5 }}>{n.text}</div>
                 </div>
+                <button
+                  onClick={() => onDeleteNote(listing.id, n.ts)}
+                  style={{ background: 'none', border: 'none', color: '#3a3a3a', cursor: 'pointer', fontSize: 14, padding: '0 2px', flexShrink: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#7a3a3a'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#3a3a3a'}
+                >
+                  ✕
+                </button>
               </div>
             ))
           )}

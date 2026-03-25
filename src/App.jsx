@@ -23,7 +23,7 @@ export default function App() {
 }
 
 function Dashboard({ onLogout }) {
-  const { listings, loading, error, addListing, updateListing, deleteListing, addNote, toggleVote } = useListings()
+  const { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, toggleVote } = useListings()
   const [showAdd, setShowAdd] = useState(false)
   const [notesListingId, setNotesListingId] = useState(null)
   const notesListing = notesListingId ? listings.find(l => l.id === notesListingId) ?? null : null
@@ -156,6 +156,7 @@ function Dashboard({ onLogout }) {
         <NotesModal
           listing={notesListing}
           onAddNote={addNote}
+          onDeleteNote={deleteNote}
           onClose={() => setNotesListingId(null)}
         />
       )}
