@@ -25,7 +25,8 @@ export default function App() {
 function Dashboard({ onLogout }) {
   const { listings, loading, error, addListing, updateListing, deleteListing, addNote, toggleVote } = useListings()
   const [showAdd, setShowAdd] = useState(false)
-  const [notesListing, setNotesListing] = useState(null)
+  const [notesListingId, setNotesListingId] = useState(null)
+  const notesListing = notesListingId ? listings.find(l => l.id === notesListingId) ?? null : null
 
   // Filters
   const [maxPrice, setMaxPrice] = useState('')
@@ -144,7 +145,7 @@ function Dashboard({ onLogout }) {
             listing={listing}
             onUpdate={updateListing}
             onDelete={deleteListing}
-            onOpenNotes={setNotesListing}
+            onOpenNotes={l => setNotesListingId(l.id)}
             onToggleVote={toggleVote}
           />
         ))}
@@ -155,7 +156,7 @@ function Dashboard({ onLogout }) {
         <NotesModal
           listing={notesListing}
           onAddNote={addNote}
-          onClose={() => setNotesListing(null)}
+          onClose={() => setNotesListingId(null)}
         />
       )}
     </div>
