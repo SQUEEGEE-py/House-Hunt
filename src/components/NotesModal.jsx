@@ -53,10 +53,10 @@ export default function NotesModal({ listing, onAddNote, onClose }) {
                   justifyContent: 'center', fontSize: 11, color: '#4a9e6e',
                   flexShrink: 0, fontFamily: '"DM Mono", monospace',
                 }}>
-                  {n.author.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  {(n.author || 'anon').split(' ').map(w => w[0]).join('').slice(0, 2)}
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, color: '#4a9e6e', marginBottom: 3, fontFamily: '"DM Mono", monospace' }}>{n.author}</div>
+                  <div style={{ fontSize: 11, color: '#4a9e6e', marginBottom: 3, fontFamily: '"DM Mono", monospace' }}>{n.author || 'anon'}</div>
                   <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.5 }}>{n.text}</div>
                 </div>
               </div>
