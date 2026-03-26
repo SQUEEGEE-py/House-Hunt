@@ -31,6 +31,17 @@ export function useListings() {
     return () => supabase.removeChannel(channel)
   }, [fetch])
 
+  async function fetchImageUrl(url) {
+    if (!url) return null
+    try {
+      const res = await window.fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`)
+      const data = await res.json()
+      return data?.data?.image?.url || null
+    } catch {
+      return null
+    }
+  }
+
   async function addListing(listing) {
     // Sanitize text fields to prevent XSS stored in DB
     const safe = Object.fromEntries(
@@ -38,6 +49,9 @@ export function useListings() {
         [k, typeof v === 'string' ? v.replace(/[<>]/g, '') : v]
       )
     )
+    if (!safe.image_url && safe.url) {
+      safe.image_url = await fetchImageUrl(safe.url)
+    }
     const { error } = await supabase.from('listings').insert([safe])
     if (error) throw new Error(error.message)
   }

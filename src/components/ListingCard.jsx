@@ -53,6 +53,18 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         </div>
       </div>
 
+      {/* Listing image */}
+      {listing.image_url && (
+        <div style={{ marginBottom: 10, borderRadius: 4, overflow: 'hidden', maxHeight: 180 }}>
+          <img
+            src={listing.image_url}
+            alt={listing.address}
+            style={{ width: '100%', objectFit: 'cover', display: 'block', maxHeight: 180 }}
+            onError={e => { e.currentTarget.style.display = 'none' }}
+          />
+        </div>
+      )}
+
       {/* Meta badges */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
         {listing.beds && <Chip>{listing.beds} bed</Chip>}
