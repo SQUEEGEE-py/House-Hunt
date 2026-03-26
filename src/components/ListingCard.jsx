@@ -71,7 +71,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
           <img
             src={listing.image_url}
             alt={listing.address}
-            style={{ width: '100%', display: 'block' }}
+            style={{ width: '40%', display: 'block', borderRadius: 4 }}
             onError={e => { e.currentTarget.style.display = 'none' }}
           />
         </div>
