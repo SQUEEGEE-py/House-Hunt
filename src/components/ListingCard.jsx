@@ -67,11 +67,11 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
 
       {/* Listing image */}
       {listing.image_url && (
-        <div style={{ marginBottom: 10, borderRadius: 4, overflow: 'hidden', maxHeight: 180 }}>
+        <div style={{ marginBottom: 10, borderRadius: 4, overflow: 'hidden' }}>
           <img
             src={listing.image_url}
             alt={listing.address}
-            style={{ width: '100%', objectFit: 'cover', display: 'block', maxHeight: 180 }}
+            style={{ width: '100%', display: 'block' }}
             onError={e => { e.currentTarget.style.display = 'none' }}
           />
         </div>
