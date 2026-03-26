@@ -8,12 +8,24 @@ const STATUS_COLORS = {
 const VOTERS = ['P1', 'P2', 'P3', 'P4']
 const VOTER_LABELS = ['Person 1', 'Person 2', 'Person 3', 'Person 4']
 
+import { useEffect } from 'react'
+
 export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, onToggleVote }) {
   const sc = STATUS_COLORS[listing.status] || STATUS_COLORS.new
   const voteCount = Object.values(listing.votes || {}).filter(Boolean).length
   const lastNote = listing.notes?.length ? listing.notes[listing.notes.length - 1] : null
 
-  function fmt(n) { return n ? `$${n.toLocaleString()}` : '—' }
+  useEffect(() => {
+    if (!listing.image_url && listing.url) {
+      fetch(`https://api.microlink.io/?url=${encodeURIComponent(listing.url)}`)
+        .then(r => r.json())
+        .then(data => {
+          const imageUrl = data?.data?.image?.url
+          if (imageUrl) onUpdate(listing.id, { image_url: imageUrl })
+        })
+        .catch(() => {})
+    }
+  }, [listing.id])
 
   return (
     <div style={{
