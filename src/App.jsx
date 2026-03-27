@@ -60,7 +60,7 @@ function Dashboard({ onLogout }) {
     <div style={{ minHeight: '100vh', background: '#0f0f0f', color: '#e8e6e0' }}>
       {/* Beta banner */}
       <div style={{ background: '#2a1f0a', borderBottom: '1px solid #3a2e10', padding: '8px 1.5rem', textAlign: 'center', fontSize: 12, color: '#c8962a', fontFamily: '"DM Mono", monospace', letterSpacing: '0.05em' }}>
-        beta — things may break and data may change
+        beta version — things may break and data is test data
       </div>
       {/* Header */}
       <div style={{ borderBottom: '1px solid #1a1a1a', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
