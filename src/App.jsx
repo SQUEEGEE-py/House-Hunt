@@ -33,7 +33,7 @@ function Dashboard({ onLogout }) {
   const [minBeds, setMinBeds] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [hoodFilter, setHoodFilter] = useState('')
-  const [maxDist, setMaxDist] = useState(10)
+  const [maxDist, setMaxDist] = useState(5)
 
   const WASH_PARK = { lat: 39.7084, lng: -104.9631 }
 
@@ -164,8 +164,8 @@ function Dashboard({ onLogout }) {
             />
           </div>
         </div>
-        {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist < 10) && (
-          <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter(''); setMaxDist(10) }}
+        {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist !== 5) && (
+          <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter(''); setMaxDist(5) }}
             style={{ padding: '7px 12px', background: 'none', border: '1px solid #2a2a2a', borderRadius: 4, color: '#555', cursor: 'pointer', fontSize: 11, fontFamily: MONO, alignSelf: 'flex-end' }}>
             clear
           </button>
