@@ -95,5 +95,13 @@ export function useListings() {
     await updateListing(listingId, { votes })
   }
 
-  return { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, toggleVote, refetch: fetch }
+  async function setRating(listingId, person, stars) {
+    const listing = listings.find(l => l.id === listingId)
+    if (!listing) return
+    const ratings = { ...(listing.ratings || { P1: null, P2: null, P3: null, P4: null }) }
+    ratings[person] = stars
+    await updateListing(listingId, { ratings })
+  }
+
+  return { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, toggleVote, setRating, refetch: fetch }
 }

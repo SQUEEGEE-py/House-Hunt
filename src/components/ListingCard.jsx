@@ -10,7 +10,7 @@ const VOTER_LABELS = ['Person 1', 'Person 2', 'Person 3', 'Person 4']
 
 import { useEffect } from 'react'
 
-export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, onToggleVote }) {
+export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, onToggleVote, onSetRating }) {
   const sc = STATUS_COLORS[listing.status] || STATUS_COLORS.new
   const voteCount = Object.values(listing.votes || {}).filter(Boolean).length
   const lastNote = listing.notes?.length ? listing.notes[listing.notes.length - 1] : null
@@ -86,6 +86,25 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
           />
         </div>
       )}
+
+      {/* Star ratings */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
+        {VOTERS.map((v) => {
+          const rating = listing.ratings?.[v] ?? 0
+          return (
+            <div key={v} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <span style={{ fontSize: 10, color: '#444', fontFamily: '"DM Mono", monospace', width: 18 }}>{v}</span>
+              {[1, 2, 3, 4, 5].map(star => (
+                <button
+                  key={star}
+                  onClick={() => onSetRating(listing.id, v, rating === star ? null : star)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 1px', fontSize: 13, color: star <= rating ? '#c8962a' : '#2a2a2a', lineHeight: 1 }}
+                >★</button>
+              ))}
+            </div>
+          )
+        })}
+      </div>
 
       {/* Meta badges */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
