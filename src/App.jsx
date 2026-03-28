@@ -145,11 +145,24 @@ function Dashboard({ onLogout }) {
           <label style={{ fontSize: 10, color: '#444', fontFamily: MONO, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             from wash park {maxDist < 10 ? `≤ ${maxDist} mi` : 'any'}
           </label>
-          <input
-            type="range" min={1} max={10} step={0.5} value={maxDist}
-            onChange={e => setMaxDist(parseFloat(e.target.value))}
-            style={{ width: 120, accentColor: '#4a9e6e', cursor: 'pointer' }}
-          />
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <input
+              type="range" min={1} max={10} step={0.5} value={maxDist}
+              onChange={e => setMaxDist(parseFloat(e.target.value))}
+              style={{ width: 80, accentColor: '#4a9e6e', cursor: 'pointer' }}
+            />
+            <select style={SEL} value={maxDist} onChange={e => setMaxDist(parseFloat(e.target.value))}>
+              {[1, 2, 3, 5, 7.5, 10].map(d => <option key={d} value={d}>{d < 10 ? `${d} mi` : 'any'}</option>)}
+            </select>
+            <input
+              type="number" min={0.5} max={10} step={0.5} value={maxDist}
+              onChange={e => {
+                const v = parseFloat(e.target.value)
+                if (!isNaN(v)) setMaxDist(Math.min(10, Math.max(0.5, v)))
+              }}
+              style={{ ...INP, width: 52 }}
+            />
+          </div>
         </div>
         {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist < 10) && (
           <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter(''); setMaxDist(10) }}
