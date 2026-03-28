@@ -25,6 +25,16 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         })
         .catch(() => {})
     }
+    if (listing.lat == null && listing.address) {
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(listing.address)}&format=json&limit=1`, {
+        headers: { 'User-Agent': 'DenverHouseHunt/1.0' }
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data[0]) onUpdate(listing.id, { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) })
+        })
+        .catch(() => {})
+    }
   }, [listing.id])
 
   return (

@@ -33,6 +33,18 @@ function Dashboard({ onLogout }) {
   const [minBeds, setMinBeds] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [hoodFilter, setHoodFilter] = useState('')
+  const [maxDist, setMaxDist] = useState(10)
+
+  const WASH_PARK = { lat: 39.7084, lng: -104.9631 }
+
+  function distanceMiles(lat1, lng1, lat2, lng2) {
+    const R = 3958.8
+    const dLat = (lat2 - lat1) * Math.PI / 180
+    const dLng = (lng2 - lng1) * Math.PI / 180
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  }
 
   const filtered = useMemo(() => {
     return listings.filter(l => {
@@ -40,9 +52,12 @@ function Dashboard({ onLogout }) {
       if (minBeds && l.beds < parseInt(minBeds)) return false
       if (statusFilter && l.status !== statusFilter) return false
       if (hoodFilter && !l.neighborhood?.toLowerCase().includes(hoodFilter.toLowerCase())) return false
+      if (maxDist < 10 && l.lat != null && l.lng != null) {
+        if (distanceMiles(l.lat, l.lng, WASH_PARK.lat, WASH_PARK.lng) > maxDist) return false
+      }
       return true
     })
-  }, [listings, maxPrice, minBeds, statusFilter, hoodFilter])
+  }, [listings, maxPrice, minBeds, statusFilter, hoodFilter, maxDist])
 
   const stats = useMemo(() => ({
     total: listings.length,
@@ -126,8 +141,18 @@ function Dashboard({ onLogout }) {
           <label style={{ fontSize: 10, color: '#444', fontFamily: MONO, letterSpacing: '0.1em', textTransform: 'uppercase' }}>neighborhood</label>
           <input style={INP} placeholder="e.g. Highland" value={hoodFilter} onChange={e => setHoodFilter(e.target.value)} />
         </div>
-        {(maxPrice || minBeds || statusFilter || hoodFilter) && (
-          <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter('') }}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 10, color: '#444', fontFamily: MONO, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            from wash park {maxDist < 10 ? `≤ ${maxDist} mi` : 'any'}
+          </label>
+          <input
+            type="range" min={1} max={10} step={0.5} value={maxDist}
+            onChange={e => setMaxDist(parseFloat(e.target.value))}
+            style={{ width: 120, accentColor: '#4a9e6e', cursor: 'pointer' }}
+          />
+        </div>
+        {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist < 10) && (
+          <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter(''); setMaxDist(10) }}
             style={{ padding: '7px 12px', background: 'none', border: '1px solid #2a2a2a', borderRadius: 4, color: '#555', cursor: 'pointer', fontSize: 11, fontFamily: MONO, alignSelf: 'flex-end' }}>
             clear
           </button>
