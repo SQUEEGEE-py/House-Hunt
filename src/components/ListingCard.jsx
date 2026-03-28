@@ -9,6 +9,7 @@ const VOTERS = ['P1', 'P2', 'P3', 'P4']
 const VOTER_LABELS = ['Person 1', 'Person 2', 'Person 3', 'Person 4']
 
 import { useEffect } from 'react'
+import './ListingCard.css'
 
 export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, onToggleVote, onSetRating }) {
   const sc = STATUS_COLORS[listing.status] || STATUS_COLORS.new
@@ -38,7 +39,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
   }, [listing.id])
 
   return (
-    <div style={{
+    <div className="listing-card" style={{
       background: '#141414',
       border: '1px solid #1e1e1e',
       borderRadius: 6,
@@ -52,7 +53,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
     >
       {/* Image */}
       {listing.image_url && (
-        <div style={{ flexShrink: 0, width: '36%', minHeight: 200 }}>
+        <div className="listing-card-image" style={{ overflow: 'hidden' }}>
           <img
             src={listing.image_url}
             alt={listing.address}
