@@ -34,6 +34,7 @@ function Dashboard({ onLogout }) {
   const [statusFilter, setStatusFilter] = useState('')
   const [hoodFilter, setHoodFilter] = useState('')
   const [maxDist, setMaxDist] = useState(5)
+  const [customDist, setCustomDist] = useState(false)
   const [sortField, setSortField] = useState('created_at')
   const [sortDir, setSortDir] = useState('desc')
 
@@ -161,22 +162,28 @@ function Dashboard({ onLogout }) {
             from wash park {maxDist < 10 ? `≤ ${maxDist} mi` : 'any'}
           </label>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            <input
-              type="range" min={1} max={10} step={0.5} value={maxDist}
-              onChange={e => setMaxDist(parseFloat(e.target.value))}
-              style={{ width: 80, accentColor: '#4a9e6e', cursor: 'pointer' }}
-            />
-            <select style={SEL} value={maxDist} onChange={e => setMaxDist(parseFloat(e.target.value))}>
+            <select style={SEL} value={customDist ? 'custom' : maxDist} onChange={e => {
+              if (e.target.value === 'custom') { setCustomDist(true) }
+              else { setCustomDist(false); setMaxDist(parseFloat(e.target.value)) }
+            }}>
               {[1, 2, 3, 5, 7.5, 10].map(d => <option key={d} value={d}>{d < 10 ? `${d} mi` : 'any'}</option>)}
+              <option value="custom">custom</option>
             </select>
-            <input
-              type="number" min={0.5} max={10} step={0.5} value={maxDist}
-              onChange={e => {
-                const v = parseFloat(e.target.value)
-                if (!isNaN(v)) setMaxDist(Math.min(10, Math.max(0.5, v)))
-              }}
-              style={{ ...INP, width: 52 }}
-            />
+            {customDist && <>
+              <input
+                type="range" min={0.5} max={10} step={0.5} value={maxDist}
+                onChange={e => setMaxDist(parseFloat(e.target.value))}
+                style={{ width: 80, accentColor: '#4a9e6e', cursor: 'pointer' }}
+              />
+              <input
+                type="number" min={0.5} max={10} step={0.5} value={maxDist}
+                onChange={e => {
+                  const v = parseFloat(e.target.value)
+                  if (!isNaN(v)) setMaxDist(Math.min(10, Math.max(0.5, v)))
+                }}
+                style={{ ...INP, width: 52 }}
+              />
+            </>}
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -201,8 +208,8 @@ function Dashboard({ onLogout }) {
             </button>
           </div>
         </div>
-        {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist !== 5) && (
-          <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter(''); setMaxDist(5) }}
+        {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist !== 5 || customDist) && (
+          <button onClick={() => { setMaxPrice(''); setMinBeds(''); setStatusFilter(''); setHoodFilter(''); setMaxDist(5); setCustomDist(false) }}
             style={{ padding: '7px 12px', background: 'none', border: '1px solid #2a2a2a', borderRadius: 4, color: '#555', cursor: 'pointer', fontSize: 11, fontFamily: MONO, alignSelf: 'flex-end' }}>
             clear
           </button>
