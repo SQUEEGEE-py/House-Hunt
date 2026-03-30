@@ -120,25 +120,52 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
           </span>
         </div>
 
-        {/* Star ratings */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {VOTERS.map((v, i) => {
-            const rating = listing.ratings?.[v] ?? 0
-            return (
-              <div key={v} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 13, color: '#555', fontFamily: '"DM Mono", monospace', width: 56 }}>{VOTER_LABELS[i]}</span>
-                {[1, 2, 3, 4, 5].map(star => (
-                  <button
-                    key={star}
-                    onClick={() => onSetRating(listing.id, v, rating === star ? null : star)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 2px', fontSize: 24, color: star <= rating ? '#c8962a' : '#2a2a2a', lineHeight: 1, transition: 'color 0.1s' }}
-                    onMouseEnter={e => e.currentTarget.style.color = star <= rating ? '#e0a830' : '#444'}
-                    onMouseLeave={e => e.currentTarget.style.color = star <= rating ? '#c8962a' : '#2a2a2a'}
-                  >★</button>
-                ))}
-              </div>
-            )
-          })}
+        {/* Ratings + Notes */}
+        <div style={{ display: 'flex', gap: 24, flex: 1 }}>
+          {/* Star ratings */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
+            {VOTERS.map((v, i) => {
+              const rating = listing.ratings?.[v] ?? 0
+              return (
+                <div key={v} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 13, color: '#555', fontFamily: '"DM Mono", monospace', width: 56 }}>{VOTER_LABELS[i]}</span>
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      onClick={() => onSetRating(listing.id, v, rating === star ? null : star)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 2px', fontSize: 24, color: star <= rating ? '#c8962a' : '#2a2a2a', lineHeight: 1, transition: 'color 0.1s' }}
+                      onMouseEnter={e => e.currentTarget.style.color = star <= rating ? '#e0a830' : '#444'}
+                      onMouseLeave={e => e.currentTarget.style.color = star <= rating ? '#c8962a' : '#2a2a2a'}
+                    >★</button>
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Notes */}
+          <div style={{ flex: 1, borderLeft: '1px solid #1e1e1e', paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto' }}>
+            {(!listing.notes?.length) ? (
+              <div style={{ fontSize: 13, color: '#333', fontStyle: 'italic' }}>no notes yet</div>
+            ) : (
+              [...listing.notes].sort((a, b) => a.ts - b.ts).map((n, i) => (
+                <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+                    background: '#1c2e24', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', fontSize: 11, color: '#4a9e6e',
+                    fontFamily: '"DM Mono", monospace',
+                  }}>
+                    {(n.author || 'anon').split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 12, color: '#4a9e6e', fontFamily: '"DM Mono", monospace', marginBottom: 2 }}>{n.author || 'anon'}</div>
+                    <div style={{ fontSize: 14, color: '#ccc', lineHeight: 1.5 }}>{n.text}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         {/* Bottom row */}
@@ -192,33 +219,6 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
             )}
             <ActionBtn onClick={() => onDelete(listing.id)} danger>✕</ActionBtn>
           </div>
-        </div>
-      </div>
-
-      {/* Notes panel */}
-      <div className="listing-card-notes">
-        <div style={{ fontSize: 10, color: '#444', fontFamily: '"DM Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>notes</div>
-        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {(!listing.notes?.length) ? (
-            <div style={{ fontSize: 12, color: '#333', fontStyle: 'italic' }}>no notes yet</div>
-          ) : (
-            [...listing.notes].sort((a, b) => a.ts - b.ts).map((n, i) => (
-              <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
-                  background: '#1c2e24', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', fontSize: 10, color: '#4a9e6e',
-                  fontFamily: '"DM Mono", monospace',
-                }}>
-                  {(n.author || 'anon').split(' ').map(w => w[0]).join('').slice(0, 2)}
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 11, color: '#4a9e6e', fontFamily: '"DM Mono", monospace', marginBottom: 2 }}>{n.author || 'anon'}</div>
-                  <div style={{ fontSize: 12, color: '#aaa', lineHeight: 1.5 }}>{n.text}</div>
-                </div>
-              </div>
-            ))
-          )}
         </div>
       </div>
 
