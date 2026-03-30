@@ -34,6 +34,8 @@ function Dashboard({ onLogout }) {
   const [statusFilter, setStatusFilter] = useState('')
   const [hoodFilter, setHoodFilter] = useState('')
   const [maxDist, setMaxDist] = useState(5)
+  const [sortField, setSortField] = useState('created_at')
+  const [sortDir, setSortDir] = useState('desc')
 
   const WASH_PARK = { lat: 39.7084, lng: -104.9631 }
 
@@ -47,7 +49,7 @@ function Dashboard({ onLogout }) {
   }
 
   const filtered = useMemo(() => {
-    return listings.filter(l => {
+    const result = listings.filter(l => {
       if (maxPrice && l.price > parseInt(maxPrice)) return false
       if (minBeds && l.beds < parseInt(minBeds)) return false
       if (statusFilter && l.status !== statusFilter) return false
@@ -57,7 +59,17 @@ function Dashboard({ onLogout }) {
       }
       return true
     })
-  }, [listings, maxPrice, minBeds, statusFilter, hoodFilter, maxDist])
+    result.sort((a, b) => {
+      let av = a[sortField], bv = b[sortField]
+      if (av == null && bv == null) return 0
+      if (av == null) return 1
+      if (bv == null) return -1
+      if (typeof av === 'string') av = av.toLowerCase(), bv = bv.toLowerCase()
+      const cmp = av < bv ? -1 : av > bv ? 1 : 0
+      return sortDir === 'asc' ? cmp : -cmp
+    })
+    return result
+  }, [listings, maxPrice, minBeds, statusFilter, hoodFilter, maxDist, sortField, sortDir])
 
   const stats = useMemo(() => {
     const withPrice = filtered.filter(l => l.price)
@@ -165,6 +177,28 @@ function Dashboard({ onLogout }) {
               }}
               style={{ ...INP, width: 52 }}
             />
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label style={{ fontSize: 10, color: '#444', fontFamily: MONO, letterSpacing: '0.1em', textTransform: 'uppercase' }}>sort by</label>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <select style={SEL} value={sortField} onChange={e => setSortField(e.target.value)}>
+              <option value="created_at">date added</option>
+              <option value="price">price</option>
+              <option value="beds">beds</option>
+              <option value="baths">baths</option>
+              <option value="sqft">sqft</option>
+              <option value="available_date">available date</option>
+              <option value="neighborhood">neighborhood</option>
+              <option value="address">address</option>
+              <option value="status">status</option>
+            </select>
+            <button
+              onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')}
+              style={{ padding: '7px 10px', background: 'none', border: '1px solid #2a2a2a', borderRadius: 4, color: '#888', cursor: 'pointer', fontSize: 12, fontFamily: MONO }}
+            >
+              {sortDir === 'asc' ? '↑' : '↓'}
+            </button>
           </div>
         </div>
         {(maxPrice || minBeds || statusFilter || hoodFilter || maxDist !== 5) && (
