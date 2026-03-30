@@ -87,6 +87,14 @@ export function useListings() {
     await updateListing(listingId, { notes })
   }
 
+  async function editNote(listingId, ts, newText) {
+    const listing = listings.find(l => l.id === listingId)
+    if (!listing) return
+    const safeText = newText.replace(/[<>]/g, '')
+    const notes = (listing.notes || []).map(n => n.ts === ts ? { ...n, text: safeText } : n)
+    await updateListing(listingId, { notes })
+  }
+
   async function toggleVote(listingId, person) {
     const listing = listings.find(l => l.id === listingId)
     if (!listing) return
@@ -103,5 +111,5 @@ export function useListings() {
     await updateListing(listingId, { ratings })
   }
 
-  return { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, toggleVote, setRating, refetch: fetch }
+  return { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, editNote, toggleVote, setRating, refetch: fetch }
 }

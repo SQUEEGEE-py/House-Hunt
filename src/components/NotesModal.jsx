@@ -2,10 +2,19 @@ import { useState } from 'react'
 
 const ROOMMATES = ['Justin', 'Jake', 'Cayden', 'Mateo']
 
-export default function NotesModal({ listing, onAddNote, onDeleteNote, onClose }) {
+export default function NotesModal({ listing, onAddNote, onDeleteNote, onEditNote, onClose }) {
   const [author, setAuthor] = useState(ROOMMATES[0])
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
+  const [editingTs, setEditingTs] = useState(null)
+  const [editText, setEditText] = useState('')
+
+  async function handleSaveEdit(ts) {
+    if (!editText.trim()) return
+    await onEditNote(listing.id, ts, editText.trim())
+    setEditingTs(null)
+    setEditText('')
+  }
 
   async function handleAdd() {
     if (!text.trim()) return
@@ -58,16 +67,34 @@ export default function NotesModal({ listing, onAddNote, onDeleteNote, onClose }
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 11, color: '#4a9e6e', marginBottom: 3, fontFamily: '"DM Mono", monospace' }}>{n.author || 'anon'}</div>
-                  <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.5 }}>{n.text}</div>
+                  {editingTs === n.ts ? (
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <input
+                        autoFocus
+                        value={editText}
+                        onChange={e => setEditText(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') handleSaveEdit(n.ts); if (e.key === 'Escape') setEditingTs(null) }}
+                        style={{ flex: 1, padding: '4px 8px', background: '#1c1c1c', border: '1px solid #4a9e6e', borderRadius: 4, color: '#e8e6e0', fontSize: 13, outline: 'none' }}
+                      />
+                      <button onClick={() => handleSaveEdit(n.ts)} style={{ background: '#4a9e6e', border: 'none', borderRadius: 4, color: '#0f0f0f', cursor: 'pointer', fontSize: 12, padding: '4px 8px' }}>save</button>
+                      <button onClick={() => setEditingTs(null)} style={{ background: 'none', border: '1px solid #2a2a2a', borderRadius: 4, color: '#555', cursor: 'pointer', fontSize: 12, padding: '4px 8px' }}>cancel</button>
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 13, color: '#aaa', lineHeight: 1.5 }}>{n.text}</div>
+                  )}
                 </div>
+                <button
+                  onClick={() => { setEditingTs(n.ts); setEditText(n.text) }}
+                  style={{ background: 'none', border: 'none', color: '#3a3a3a', cursor: 'pointer', fontSize: 13, padding: '0 2px', flexShrink: 0 }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#4a9e6e'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#3a3a3a'}
+                >✎</button>
                 <button
                   onClick={() => onDeleteNote(listing.id, n.ts)}
                   style={{ background: 'none', border: 'none', color: '#3a3a3a', cursor: 'pointer', fontSize: 14, padding: '0 2px', flexShrink: 0 }}
                   onMouseEnter={e => e.currentTarget.style.color = '#7a3a3a'}
                   onMouseLeave={e => e.currentTarget.style.color = '#3a3a3a'}
-                >
-                  ✕
-                </button>
+                >✕</button>
               </div>
             ))
           )}

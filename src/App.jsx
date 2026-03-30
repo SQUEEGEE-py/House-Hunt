@@ -23,7 +23,7 @@ export default function App() {
 }
 
 function Dashboard({ onLogout }) {
-  const { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, toggleVote, setRating } = useListings()
+  const { listings, loading, error, addListing, updateListing, deleteListing, addNote, deleteNote, editNote, toggleVote, setRating } = useListings()
   const [showAdd, setShowAdd] = useState(false)
   const [notesListingId, setNotesListingId] = useState(null)
   const notesListing = notesListingId ? listings.find(l => l.id === notesListingId) ?? null : null
@@ -203,6 +203,7 @@ function Dashboard({ onLogout }) {
           listing={notesListing}
           onAddNote={addNote}
           onDeleteNote={deleteNote}
+          onEditNote={editNote}
           onClose={() => setNotesListingId(null)}
         />
       )}
