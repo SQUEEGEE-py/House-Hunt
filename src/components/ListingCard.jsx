@@ -122,11 +122,11 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
 
         {/* Star ratings */}
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-          {VOTERS.map((v) => {
+          {VOTERS.map((v, i) => {
             const rating = listing.ratings?.[v] ?? 0
             return (
               <div key={v} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 11, color: '#555', fontFamily: '"DM Mono", monospace', width: 20 }}>{v}</span>
+                <span style={{ fontSize: 11, color: '#555', fontFamily: '"DM Mono", monospace', width: 44 }}>{VOTER_LABELS[i]}</span>
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
                     key={star}
