@@ -12,6 +12,10 @@
   flex-direction: row;
 }
 
+.listing-card-ratings-notes {
+  flex-direction: row;
+}
+
 
 @media (max-width: 640px) {
   .listing-card {
@@ -28,10 +32,14 @@
     flex-direction: column;
   }
 
-  .listing-card-notes {
-    width: 100%;
-    border-left: none;
+  .listing-card-ratings-notes {
+    flex-direction: column;
+  }
+
+  .listing-card-ratings-notes .notes-divider {
+    border-left: none !important;
     border-top: 1px solid #1e1e1e;
-    padding: 1rem 1.25rem;
+    padding-left: 0 !important;
+    padding-top: 16px;
   }
 }

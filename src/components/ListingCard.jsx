@@ -121,7 +121,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         </div>
 
         {/* Ratings + Notes */}
-        <div style={{ display: 'flex', gap: 24, flex: 1 }}>
+        <div className="listing-card-ratings-notes" style={{ display: 'flex', gap: 24, flex: 1 }}>
           {/* Star ratings */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
             {VOTERS.map((v, i) => {
@@ -144,7 +144,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
           </div>
 
           {/* Notes */}
-          <div style={{ flex: 1, borderLeft: '1px solid #1e1e1e', paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto' }}>
+          <div className="notes-divider" style={{ flex: 1, borderLeft: '1px solid #1e1e1e', paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10, overflowY: 'auto' }}>
             {(!listing.notes?.length) ? (
               <div style={{ fontSize: 13, color: '#333', fontStyle: 'italic' }}>no notes yet</div>
             ) : (
