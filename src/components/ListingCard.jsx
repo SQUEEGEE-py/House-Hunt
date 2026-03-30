@@ -144,14 +144,13 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         {/* Bottom row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginTop: 'auto' }}>
           {/* Vote buttons */}
-          <div style={{ display: 'flex', gap: 4 }}>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
             {VOTERS.map((v, i) => (
               <button
                 key={v}
                 onClick={() => onToggleVote(listing.id, v)}
-                title={`${VOTER_LABELS[i]} vote`}
                 style={{
-                  width: 30, height: 30, borderRadius: '50%',
+                  padding: '4px 10px', borderRadius: 20,
                   border: `1px solid ${listing.votes?.[v] ? '#4a9e6e' : '#2a2a2a'}`,
                   background: listing.votes?.[v] ? '#1c2e24' : '#1a1a1a',
                   color: listing.votes?.[v] ? '#4a9e6e' : '#444',
@@ -159,7 +158,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
                   transition: 'all 0.15s',
                 }}
               >
-                {v}
+                {VOTER_LABELS[i]}
               </button>
             ))}
           </div>
