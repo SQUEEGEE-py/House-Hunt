@@ -26,13 +26,24 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         })
         .catch(() => {})
     }
-    if (listing.lat == null && listing.address) {
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(listing.address)}&format=json&limit=1`, {
+    if ((listing.lat == null || !listing.neighborhood) && listing.address) {
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(listing.address)}&format=json&limit=1&addressdetails=1`, {
         headers: { 'User-Agent': 'DenverHouseHunt/1.0' }
       })
         .then(r => r.json())
         .then(data => {
-          if (data[0]) onUpdate(listing.id, { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) })
+          if (!data[0]) return
+          const updates = {}
+          if (listing.lat == null) {
+            updates.lat = parseFloat(data[0].lat)
+            updates.lng = parseFloat(data[0].lon)
+          }
+          if (!listing.neighborhood) {
+            const addr = data[0].address || {}
+            const hood = addr.neighbourhood || addr.suburb || addr.quarter || addr.city_district || null
+            if (hood) updates.neighborhood = hood
+          }
+          if (Object.keys(updates).length) onUpdate(listing.id, updates)
         })
         .catch(() => {})
     }
