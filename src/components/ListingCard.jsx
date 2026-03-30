@@ -121,17 +121,17 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
         </div>
 
         {/* Star ratings */}
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {VOTERS.map((v, i) => {
             const rating = listing.ratings?.[v] ?? 0
             return (
-              <div key={v} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 11, color: '#555', fontFamily: '"DM Mono", monospace', width: 44 }}>{VOTER_LABELS[i]}</span>
+              <div key={v} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 13, color: '#555', fontFamily: '"DM Mono", monospace', width: 56 }}>{VOTER_LABELS[i]}</span>
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
                     key={star}
                     onClick={() => onSetRating(listing.id, v, rating === star ? null : star)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 1px', fontSize: 18, color: star <= rating ? '#c8962a' : '#2a2a2a', lineHeight: 1, transition: 'color 0.1s' }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 2px', fontSize: 24, color: star <= rating ? '#c8962a' : '#2a2a2a', lineHeight: 1, transition: 'color 0.1s' }}
                     onMouseEnter={e => e.currentTarget.style.color = star <= rating ? '#e0a830' : '#444'}
                     onMouseLeave={e => e.currentTarget.style.color = star <= rating ? '#c8962a' : '#2a2a2a'}
                   >★</button>
