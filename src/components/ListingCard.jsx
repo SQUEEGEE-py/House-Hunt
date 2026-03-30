@@ -6,7 +6,7 @@ const STATUS_COLORS = {
 }
 
 const VOTERS = ['P1', 'P2', 'P3', 'P4']
-const VOTER_LABELS = ['Person 1', 'Person 2', 'Person 3', 'Person 4']
+const VOTER_LABELS = ['Justin', 'Jake', 'Cayden', 'Mateo']
 
 import { useEffect } from 'react'
 import './ListingCard.css'

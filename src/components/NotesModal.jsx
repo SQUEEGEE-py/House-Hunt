@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const ROOMMATES = ['Person 1', 'Person 2', 'Person 3', 'Person 4']
+const ROOMMATES = ['Justin', 'Jake', 'Cayden', 'Mateo']
 
 export default function NotesModal({ listing, onAddNote, onDeleteNote, onClose }) {
   const [author, setAuthor] = useState(ROOMMATES[0])
