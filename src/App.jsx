@@ -59,14 +59,17 @@ function Dashboard({ onLogout }) {
     })
   }, [listings, maxPrice, minBeds, statusFilter, hoodFilter, maxDist])
 
-  const stats = useMemo(() => ({
-    total: listings.length,
-    toTour: listings.filter(l => l.status === 'tour').length,
-    applied: listings.filter(l => l.status === 'applied').length,
-    avgPrice: listings.length
-      ? Math.round(listings.filter(l => l.price).reduce((a, l) => a + l.price, 0) / listings.filter(l => l.price).length)
-      : null,
-  }), [listings])
+  const stats = useMemo(() => {
+    const withPrice = filtered.filter(l => l.price)
+    return {
+      total: listings.length,
+      toTour: listings.filter(l => l.status === 'tour').length,
+      applied: listings.filter(l => l.status === 'applied').length,
+      avgPrice: withPrice.length
+        ? Math.round(withPrice.reduce((a, l) => a + l.price, 0) / withPrice.length)
+        : null,
+    }
+  }, [listings, filtered])
 
   const SEL = { padding: '7px 10px', background: '#141414', border: '1px solid #2a2a2a', borderRadius: 4, color: '#888', fontSize: 12, fontFamily: MONO, outline: 'none', cursor: 'pointer' }
   const INP = { ...SEL, minWidth: 100 }
