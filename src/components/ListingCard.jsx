@@ -14,7 +14,6 @@ import './ListingCard.css'
 export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, onToggleVote, onSetRating }) {
   const sc = STATUS_COLORS[listing.status] || STATUS_COLORS.new
   const voteCount = Object.values(listing.votes || {}).filter(Boolean).length
-  const lastNote = listing.notes?.length ? listing.notes[listing.notes.length - 1] : null
 
   useEffect(() => {
     if (!listing.image_url && listing.url) {
@@ -75,6 +74,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
       )}
 
       {/* Content */}
+      <div className="listing-card-body" style={{ flex: 1, display: 'flex', minWidth: 0 }}>
       <div style={{ flex: 1, padding: '1.25rem 1.5rem', display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
 
         {/* Address + price */}
@@ -166,13 +166,6 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
             {voteCount}/4 want to tour
           </span>
 
-          {/* Last note preview */}
-          {lastNote && (
-            <div style={{ flex: 1, fontSize: 12, color: '#555', fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-              <span style={{ color: '#3a7a55' }}>{(lastNote.author || 'anon').split(' ')[0]}:</span> {lastNote.text}
-            </div>
-          )}
-
           {/* Actions */}
           <div style={{ display: 'flex', gap: 6, marginLeft: 'auto', flexShrink: 0 }}>
             <select
@@ -190,7 +183,7 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
               <option value="pass">pass</option>
             </select>
             <ActionBtn onClick={() => onOpenNotes(listing)}>
-              notes {listing.notes?.length ? `(${listing.notes.length})` : ''}
+              + note
             </ActionBtn>
             {listing.url && (
               <ActionBtn onClick={() => window.open(listing.url, '_blank')} accent>
@@ -201,7 +194,36 @@ export default function ListingCard({ listing, onUpdate, onDelete, onOpenNotes, 
           </div>
         </div>
       </div>
+
+      {/* Notes panel */}
+      <div className="listing-card-notes">
+        <div style={{ fontSize: 10, color: '#444', fontFamily: '"DM Mono", monospace', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>notes</div>
+        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {(!listing.notes?.length) ? (
+            <div style={{ fontSize: 12, color: '#333', fontStyle: 'italic' }}>no notes yet</div>
+          ) : (
+            [...listing.notes].sort((a, b) => a.ts - b.ts).map((n, i) => (
+              <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
+                  background: '#1c2e24', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', fontSize: 10, color: '#4a9e6e',
+                  fontFamily: '"DM Mono", monospace',
+                }}>
+                  {(n.author || 'anon').split(' ').map(w => w[0]).join('').slice(0, 2)}
+                </div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 11, color: '#4a9e6e', fontFamily: '"DM Mono", monospace', marginBottom: 2 }}>{n.author || 'anon'}</div>
+                  <div style={{ fontSize: 12, color: '#aaa', lineHeight: 1.5 }}>{n.text}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
     </div>
+  </div>
   )
 }
 
